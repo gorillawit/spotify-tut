@@ -1,0 +1,26 @@
+{
+  "name": "api-tutorial",
+  "version": "0.0.0",
+  "description": "This is a Spotify App that shows useful code snippets that can help you build [Spotify Apps](https://developer.spotify.com/technologies/apps/). It uses the most recent version of the Spotify Apps API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spotify/apps-tutorial.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/spotify/apps-tutorial/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-sass": "~0.7.1",
+    "grunt-contrib-haml": "~0.1.1",
+    "grunt-contrib-coffee": "~0.9.0",
+    "grunt-contrib-livereload": "~0.1.2",
+    "grunt-contrib-watch": "~0.5.3"
+  }
+}
