@@ -17,20 +17,27 @@ require ['$api/models'], (models) ->
         # compose file 
         # a = if true then 5 else 10
         if args.length is 1
-            file = (args[0] + '.html')
+            file = (args[0] + '.html') 
         else
             file = '/tutorials/' + args.slice(0, args.length-1).join('/') + '.html'
+        # console.log(file);  //returns either index.html, tabs.html or any of the files in tutorials/
         xhr = new XMLHttpRequest()
         xhr.open 'GET', file
         xhr.onreadystatechange = () -> 
+             # basically this says stop running this function if it's got all it's data or it can't retrieve it at all (i think)
             if xhr.readyState isnt 4 or xhr.status isnt 200 then return
 
             wrapper = document.getElementById 'wrapper'
+            # fill #wrapper with... 
+
+            # wrapper.innerHTML = if on index.html, no arguments, else add "back" breadcrumbs
             if args[0] is 'index'
                 wrapper.innerHTML = '' 
             else 
                 wrapper.innerHTML = '<ul class="breadcrumb"><li><a href="spotify:app:api-tutorial:index">&laquo; Back to main page</a></li></ul>'
             
+            # basically if you're on the home page replace any injected child divs with the content that is actually in the original index.html file
+            # if home tab (index page) is clicked or onLoad...
             if args[0] is 'index'
                 # create a variable to hold the outermost div (parent of wrapper)
                 aux = document.createElement 'div'
