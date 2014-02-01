@@ -1,0 +1,27 @@
+.section
+  %h1 Play a single track
+  %p.description This snippet of code plays a hardcoded Spotify URI.
+  .reference
+    Reference:
+    %a{href: "https://developer.spotify.com/docs/apps/api/1.0/api-models-track.html"} Track Model
+    and
+    = succeed "." do
+      %a{href: "https://developer.spotify.com/docs/apps/views/1.0/image-image.html"} Image View
+  %h3 The Javascrip
+  #js
+  %h3 The HTML
+  #html
+  %h3 Live Example
+  .html-snippet{"data-container" => "html"}
+    #single-track-player
+  %script{"data-container" => "js", type: "script/snippet"}
+    :plain
+      require(['$api/models', '$views/image#Image'], function(models, Image) {
+      
+      // Play a single track
+      var track = models.Track.fromURI('spotify:track:0od5EJ2oNtr6mcaXIG3kGc');
+      var image = Image.forTrack(track, {player: true});
+      
+      // Pass the player HTML code to the #single-track-player div
+      document.getElementById('single-track-player').appendChild(image.node);
+      });

@@ -23,7 +23,7 @@ module.exports = function(grunt) {
           }
         },
         html: {
-          files: ['./*.haml'],
+          files: ['./*.haml', 'tutorials/playing/*.haml'],
           tasks: ['haml'],
           options: {
               spawn: false,
@@ -37,26 +37,28 @@ module.exports = function(grunt) {
             sourcemap: true
           },
           files: {
-            'css/app.css': 'sass/app.scss'
+            'css/app.css': ['sass/*.scss']
           }
         }
       },
       haml: {
         dist: {
           files: {
-            'index.html': 'index.haml'
+            'index.html': 'index.haml', 
+            'tutorials/playing/play-track.html' : 'tutorials/playing/play-track.haml'
           }
         }
       },
       coffee: {
         compileWithMaps: {
           options: {
-            sourceMap: true
+            sourceMap: true,
+            bare: true
           },
           files: {
-            'js/scripts.js': 'coffee/scripts.coffee'
+            'js/tutorial.js' : ['coffee/*.coffee'] // concat then compile into single file
           }
-        },
+        }
       }
     });
 
