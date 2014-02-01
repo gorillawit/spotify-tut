@@ -14,27 +14,32 @@ require ['$api/models'], (models) ->
             lastArg = args[args.length - 1]
             return if lastArg isnt 'index' and lastArg isnt 'tabs'
 
-        # compose file a = if true then 5 else 10
+        # compose file 
+        # a = if true then 5 else 10
         if args.length is 1
-            file = args[0] + '.html'
+            file = (args[0] + '.html')
         else
             file = '/tutorials/' + args.slice(0, args.length-1).join('/') + '.html'
         xhr = new XMLHttpRequest()
         xhr.open 'GET', file
-        xhr.onreadystatechange = () ->
+        xhr.onreadystatechange = () -> 
             if xhr.readyState isnt 4 or xhr.status isnt 200 then return
 
             wrapper = document.getElementById 'wrapper'
             if args[0] is 'index'
-                wrapper.innerHTML = ''
+                wrapper.innerHTML = '' 
             else 
                 wrapper.innerHTML = '<ul class="breadcrumb"><li><a href="spotify:app:api-tutorial:index">&laquo; Back to main page</a></li></ul>'
             
             if args[0] is 'index'
+                # create a variable to hold the outermost div (parent of wrapper)
                 aux = document.createElement 'div'
+                # add file's html to the aux div
                 aux.innerHTML = xhr.responseText
+                # wrapper.innerHTML = index.html > div > #wrapper > child div
                 wrapper.innerHTML = aux.querySelector('#wrapper').innerHTML
             else
+                # else load the partial html from the tutorial link selected's partial html file (ev: tutorials/getting-started/arguments)
                 wrapper.innerHTML += xhr.responseText
 
             window.scrollTo 0, 0
