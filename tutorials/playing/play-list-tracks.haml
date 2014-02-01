@@ -1,0 +1,26 @@
+.section
+  %h1 Play a list of tracks
+  %p.description This snippet of code renders a playlist using a List view.
+  .reference
+    Reference:
+    %a{href: "https://developer.spotify.com/docs/apps/api/1.0/api-models-playlist.html"} Playlist Model
+    and
+    = succeed "." do
+      %a{href: "https://developer.spotify.com/docs/apps/views/1.0/list-list.html"} List View
+  %h3 The Javascript
+  #js
+  %h3 he HTML
+  #html
+  %h3 Live Example
+  .html-snippet{"data-container" => "html"}
+    #playlist-player
+  %script{"data-container" => "js", type: "script/snippet"}
+    :plain
+      require(['$api/models', '$views/list#List'], function(models, List) {
+      
+      var playlist = models.Playlist.fromURI('spotify:user:gorillawit:playlist:3SD5mWUVQG7TJfuJmJDwKq'),
+      list = List.forPlaylist(playlist);
+      
+      document.getElementById('playlist-player').appendChild(list.node);
+      list.init();
+      });

@@ -45,7 +45,8 @@ module.exports = function(grunt) {
         dist: {
           files: {
             'index.html': 'index.haml', 
-            'tutorials/playing/play-track.html' : 'tutorials/playing/play-track.haml'
+            'tutorials/playing/play-track.html' : 'tutorials/playing/play-track.haml',
+            'tutorials/playing/play-list-tracks.html' : 'tutorials/playing/play-list-tracks.haml'
           }
         }
       },
