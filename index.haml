@@ -22,6 +22,8 @@
           -# %h3 The Javascript
           -# #js
           -# %h3 he HTML
+          .html-snippet{"data-container" => "html"}
+            #drop-box Drop a playlist here
           #html
           -# %h3 Live Example
           .html-snippet{"data-container" => "html"}
@@ -35,6 +37,42 @@
               
               document.getElementById('playlist-player').appendChild(list.node);
               list.init();
+
+
+              // Handle drops
+              var dropBox = document.querySelector('#drop-box');
+
+              dropBox.addEventListener('dragstart', function(e){
+                  e.dataTransfer.setData('text/html', this.innerHTML);
+                  e.dataTransfer.effectAllowed = 'copy';
+              }, false);
+
+              dropBox.addEventListener('dragenter', function(e){
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = 'copy';
+                  this.classList.add('over');
+              }, false);
+
+              dropBox.addEventListener('dragover', function(e){
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = 'copy';
+                  return false;
+              }, false);
+
+              dropBox.addEventListener('dragleave', function(e){
+                  e.preventDefault();
+                  this.classList.remove('over');
+              }, false);
+
+              dropBox.addEventListener('drop', function(e){
+                  e.preventDefault();
+                  var drop = models.Playlist.fromURI(e.dataTransfer.getData('text'));
+                  this.classList.remove('over');
+                  var successMessage = document.createElement('p');
+                  successMessage.innerHTML = 'Playlist successfully dropped: ' + drop.uri;
+                  this.appendChild(successMessage);
+              }, false);
               });
     %script{src: "/js/rainbow-custom.min.js"}
-    %script{src: "/js/tutorial.js"}
+    -# %script{src: "/js/tutorial.js"}
+    %script{src: "/js/main.js"}

@@ -57,7 +57,8 @@ module.exports = function(grunt) {
             bare: true
           },
           files: {
-            'js/tutorial.js' : ['coffee/*.coffee'] // concat then compile into single file
+            'js/main.js' : ['coffee/main.coffee'] // concat then compile into single file
+            // 'js/tutorial.js' : ['coffee/*.coffee'] // concat then compile into single file
           }
         }
       }
