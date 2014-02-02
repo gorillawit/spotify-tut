@@ -3,4 +3,8 @@ li {
   background: red;
 }
 
+h2 span {
+  font: 1em Arial, sans-serif;
+}
+
 /*# sourceMappingURL=app.css.map */

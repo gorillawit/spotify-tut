@@ -6,6 +6,7 @@ require(['$api/models'], function(models) {
   tabs = function() {
     var args, file, lastArg, xhr;
     args = models.application["arguments"];
+    console.log(args);
     if (args) {
       lastArg = args[args.length - 1];
       if (lastArg !== 'index' && lastArg !== 'tabs') {
@@ -20,7 +21,7 @@ require(['$api/models'], function(models) {
     xhr = new XMLHttpRequest();
     xhr.open('GET', file);
     xhr.onreadystatechange = function() {
-      var aux, container, dataExecute, htmlSnippets, sc, scripts, snips, wrapper, _i, _j, _len, _len1;
+      var aux, container, dataExecute, sc, scripts, wrapper, _i, _len;
       if (xhr.readyState !== 4 || xhr.status !== 200) {
         return;
       }
@@ -38,18 +39,9 @@ require(['$api/models'], function(models) {
         wrapper.innerHTML += xhr.responseText;
       }
       window.scrollTo(0, 0);
-      htmlSnippets = wrapper.querySelectorAll(".html-snippet");
-      console.log(htmlSnippets);
-      for (_i = 0, _len = htmlSnippets.length; _i < _len; _i++) {
-        snips = htmlSnippets[_i];
-        container = snips.getAttribute("data-container");
-        if (container) {
-          document.getElementById(container).innerHTML = '<pre><code data-language="html">' + htmlEscape(snips.innerHTML) + '</code></pre>';
-        }
-      }
       scripts = wrapper.querySelectorAll("script");
-      for (_j = 0, _len1 = scripts.length; _j < _len1; _j++) {
-        sc = scripts[_j];
+      for (_i = 0, _len = scripts.length; _i < _len; _i++) {
+        sc = scripts[_i];
         if (sc.getAttribute('type') === 'script/snippet') {
           dataExecute = sc.getAttribute('data-execute');
           if (!dataExecute || dataExecute !== 'no') {

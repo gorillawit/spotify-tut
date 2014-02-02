@@ -6,16 +6,29 @@
     <link href='$views/css/buttons.css' rel='stylesheet'>
     <link href='css/main.css' rel='stylesheet'>
     <link href='css/github.css' rel='stylesheet'>
+    <link href='css/app.css' rel='stylesheet'>
   </head>
   <body>
     <div id='wrapper'>
       <div class='section' id='index'>
         <h1>ShootOut</h1>
-        <ul>
-          <li>
-            <a href='spotify:app:api-tutorial:playing:play-list-tracks'>Play a list of tracks</a>
-          </li>
-        </ul>
+        <h2>Two Songs Enter<span> one song leaves</span></h2>
+        <div class='section'>
+          <div id='html'></div>
+          <div class='html-snippet' data-container='html'>
+            <div id='playlist-player'></div>
+          </div>
+          <script data-container='js' type='script/snippet'>
+            require(['$api/models', '$views/list#List'], function(models, List) {
+            
+            var playlist = models.Playlist.fromURI('spotify:user:gorillawit:playlist:3SD5mWUVQG7TJfuJmJDwKq'),
+            list = List.forPlaylist(playlist);
+            
+            document.getElementById('playlist-player').appendChild(list.node);
+            list.init();
+            });
+          </script>
+        </div>
       </div>
     </div>
     <script src='/js/rainbow-custom.min.js'></script>

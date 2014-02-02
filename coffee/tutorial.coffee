@@ -10,6 +10,7 @@ require ['$api/models'], (models) ->
 
     tabs = () ->
         args = models.application.arguments
+        console.log args
         if args
             lastArg = args[args.length - 1]
             return if lastArg isnt 'index' and lastArg isnt 'tabs'
@@ -50,15 +51,6 @@ require ['$api/models'], (models) ->
                 wrapper.innerHTML += xhr.responseText
 
             window.scrollTo 0, 0
-            # check all selectors ".html-snippet" and store them in an array
-            htmlSnippets = wrapper.querySelectorAll(".html-snippet")
-            console.log htmlSnippets
-            # iterate over all the .html-snippets and check if they have an attribute of "data-container"
-            for snips in htmlSnippets
-                container = snips.getAttribute "data-container"
-                # if it has a "data-container" attr...
-                if container then document.getElementById(container).innerHTML = '<pre><code data-language="html">' + htmlEscape(snips.innerHTML) + '</code></pre>'
-                    # add a <pre><code> around it and display the script as a code snippet (will not see as a script)
 
             # search for js snippets with a <script>, add to scripts array
             scripts = wrapper.querySelectorAll "script"
