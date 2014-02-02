@@ -2,14 +2,13 @@ module.exports = function(grunt) {
 
     // 1. All configuration goes here 
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
 
       watch: {
         options: {
             livereload: true,
         },
         scripts: {
-          files: ['coffee/*.coffee'],
+          files: ['src/*.coffee'],
           tasks: ['coffee'],
           options: {
               spawn: false,
@@ -23,7 +22,7 @@ module.exports = function(grunt) {
           }
         },
         html: {
-          files: ['./*.haml', 'tutorials/playing/*.haml'],
+          files: ['*.haml', 'tutorials/playing/*.haml'],
           tasks: ['haml'],
           options: {
               spawn: false,
@@ -57,7 +56,7 @@ module.exports = function(grunt) {
             bare: true
           },
           files: {
-            'js/main.js' : ['coffee/main.coffee'] // concat then compile into single file
+            'lib/main.js' : ['src/*.coffee'] // concat then compile into single file
             // 'js/tutorial.js' : ['coffee/*.coffee'] // concat then compile into single file
           }
         }
