@@ -1,4 +1,4 @@
-require(['$api/models'], function(models) {
+require(['$api/models', '$views/list#List'], function(models, List) {
   var htmlEscape, tabs;
   htmlEscape = function(str) {
     return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -9,7 +9,7 @@ require(['$api/models'], function(models) {
     xhr = new XMLHttpRequest();
     xhr.open('GET', file);
     xhr.onreadystatechange = function() {
-      var aux, container, dataExecute, sc, scripts, wrapper, _i, _len;
+      var aux, dropBox, list, playlist, wrapper;
       if (xhr.readyState !== 4 || xhr.status !== 200) {
         return;
       }
@@ -19,21 +19,38 @@ require(['$api/models'], function(models) {
       aux.innerHTML = xhr.responseText;
       wrapper.innerHTML = aux.querySelector('#wrapper').innerHTML;
       window.scrollTo(0, 0);
-      scripts = wrapper.querySelectorAll("script");
-      for (_i = 0, _len = scripts.length; _i < _len; _i++) {
-        sc = scripts[_i];
-        if (sc.getAttribute('type') === 'script/snippet') {
-          dataExecute = sc.getAttribute('data-execute');
-          if (!dataExecute || dataExecute !== 'no') {
-            eval(sc.innerHTML);
-          }
-          container = sc.getAttribute("data-container");
-          if (container) {
-            document.getElementById(container).innerHTML = '<pre><code data-language="javascript">' + htmlEscape(sc.innerHTML) + '</code></pre>';
-          }
-        }
-      }
-      return Rainbow.color();
+      playlist = models.Playlist.fromURI('spotify:user:gorillawit:playlist:3SD5mWUVQG7TJfuJmJDwKq');
+      list = List.forPlaylist(playlist);
+      document.getElementById('playlist-player').appendChild(list.node);
+      list.init();
+      dropBox = document.querySelector('#drop-box');
+      dropBox.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        return e.dataTransfer.effectAllowed = 'copy';
+      });
+      dropBox.addEventListener('dragenter', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+        return this.classList.add('over');
+      });
+      dropBox.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+        return false;
+      });
+      dropBox.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        return this.classList.remove('over');
+      });
+      return dropBox.addEventListener('drop', function(e) {
+        var drop, successMessage;
+        e.preventDefault();
+        drop = models.Playlist.fromURI(e.dataTransfer.getData('text'));
+        this.classList.remove('over');
+        successMessage = document.createElement('p');
+        successMessage.innerHTML = 'Playlist successfully dropped: ' + drop.uri;
+        return this.appendChild(successMessage);
+      });
     };
     return xhr.send(null);
   };

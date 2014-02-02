@@ -29,50 +29,6 @@
           .html-snippet{"data-container" => "html"}
             #playlist-player
           %script{"data-container" => "js", type: "script/snippet"}
-            :plain
-              require(['$api/models', '$views/list#List'], function(models, List) {
-              
-              var playlist = models.Playlist.fromURI('spotify:user:gorillawit:playlist:3SD5mWUVQG7TJfuJmJDwKq'),
-              list = List.forPlaylist(playlist);
-              
-              document.getElementById('playlist-player').appendChild(list.node);
-              list.init();
-
-
-              // Handle drops
-              var dropBox = document.querySelector('#drop-box');
-
-              dropBox.addEventListener('dragstart', function(e){
-                  e.dataTransfer.setData('text/html', this.innerHTML);
-                  e.dataTransfer.effectAllowed = 'copy';
-              }, false);
-
-              dropBox.addEventListener('dragenter', function(e){
-                  e.preventDefault();
-                  e.dataTransfer.dropEffect = 'copy';
-                  this.classList.add('over');
-              }, false);
-
-              dropBox.addEventListener('dragover', function(e){
-                  e.preventDefault();
-                  e.dataTransfer.dropEffect = 'copy';
-                  return false;
-              }, false);
-
-              dropBox.addEventListener('dragleave', function(e){
-                  e.preventDefault();
-                  this.classList.remove('over');
-              }, false);
-
-              dropBox.addEventListener('drop', function(e){
-                  e.preventDefault();
-                  var drop = models.Playlist.fromURI(e.dataTransfer.getData('text'));
-                  this.classList.remove('over');
-                  var successMessage = document.createElement('p');
-                  successMessage.innerHTML = 'Playlist successfully dropped: ' + drop.uri;
-                  this.appendChild(successMessage);
-              }, false);
-              });
     %script{src: "/js/rainbow-custom.min.js"}
     -# %script{src: "/js/tutorial.js"}
     %script{src: "/js/main.js"}

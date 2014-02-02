@@ -1,5 +1,4 @@
-require ['$api/models'], (models) ->
-
+require ['$api/models', '$views/list#List'], (models, List) ->
     htmlEscape = (str) ->
         return String(str)
                 .replace(/&/g, '&amp;')
@@ -38,48 +37,73 @@ require ['$api/models'], (models) ->
             aux.innerHTML = xhr.responseText
             wrapper.innerHTML = aux.querySelector('#wrapper').innerHTML
 
-            # wrapper.innerHTML = if on index.html, no arguments, else add "back" breadcrumbs
-            # if args[0] is 'index'
-            #     wrapper.innerHTML = '' 
-            # else 
-            #     wrapper.innerHTML = '<ul class="breadcrumb"><li><a href="spotify:app:api-tutorial:index">&laquo; Back to main page</a></li></ul>'
-            
-            # basically if you're on the home page replace any injected child divs with the content that is actually in the original index.html file
-            # if home tab (index page) is clicked or onLoad...
-            # if args[0] is 'index'
-                # create a variable to hold the outermost div (parent of wrapper)
-                # aux = document.createElement 'div'
-                # add file's html to the aux div
-                # aux.innerHTML = xhr.responseText
-                # wrapper.innerHTML = index.html > div > #wrapper > child div
-                # wrapper.innerHTML = aux.querySelector('#wrapper').innerHTML
-            # else
-                # else load the partial html from the tutorial link selected's partial html file (ev: tutorials/getting-started/arguments)
-                # wrapper.innerHTML += xhr.responseText
-
             window.scrollTo 0, 0
+              
+            playlist = models.Playlist.fromURI 'spotify:user:gorillawit:playlist:3SD5mWUVQG7TJfuJmJDwKq'
+            list = List.forPlaylist playlist
+            document.getElementById('playlist-player').appendChild list.node
+            list.init()
+
+            # Handle drag and drops
+            dropBox = document.querySelector '#drop-box'
+
+            # add "copy" icon to mouse cursor
+            dropBox.addEventListener 'dragstart', (e) ->
+                e.dataTransfer.setData 'text/html', @innerHTML
+                e.dataTransfer.effectAllowed = 'copy'
+                # false
+
+            # drop-box turns to green outline when dragging and hovered over
+            dropBox.addEventListener 'dragenter', (e) ->
+                e.preventDefault()
+                e.dataTransfer.dropEffect = 'copy'
+                @classList.add 'over'
+                # false
+
+            # prevents the default action of showing the default Spotify playlist view
+            dropBox.addEventListener 'dragover', (e) ->
+                e.preventDefault()
+                e.dataTransfer.dropEffect = 'copy'
+                return false
+                # false
+
+            # drop-box returns to black outline when dragging off of it
+            dropBox.addEventListener 'dragleave', (e) ->
+                e.preventDefault()
+                @classList.remove 'over'
+                # false
+
+            # on drop, show the uri address for the playlist (from which we'll be getting all the data)
+            dropBox.addEventListener 'drop', (e) ->
+                e.preventDefault()
+                drop = models.Playlist.fromURI e.dataTransfer.getData 'text'
+                @classList.remove 'over'
+                successMessage = document.createElement 'p'
+                successMessage.innerHTML = 'Playlist successfully dropped: ' + drop.uri
+                @appendChild successMessage
+                # false
 
             # search for js snippets with a <script>, add to scripts array
-            scripts = wrapper.querySelectorAll "script"
+            # scripts = wrapper.querySelectorAll "script"
             # iterate over scripts array
-            for sc in scripts
+            # for sc in scripts
                 # if current <script> has a type="script/snippet"
-                if sc.getAttribute('type') is 'script/snippet'
+                # if sc.getAttribute('type') is 'script/snippet'
                     # get the value of it's "data-execute" attr and store in dataExecute var
-                    dataExecute = sc.getAttribute 'data-execute'
+                    # dataExecute = sc.getAttribute 'data-execute'
                     # if no "data-execute" at all or "data-execute"s value isn't 'no'
-                    if !dataExecute or dataExecute isnt 'no'
+                    # if !dataExecute or dataExecute isnt 'no'
                         # run that script
-                        eval sc.innerHTML
+                        # eval sc.innerHTML
                     # add all <script>s with "data-container" attr to container var
-                    container = sc.getAttribute "data-container"
+                    # container = sc.getAttribute "data-container"
                     # if it does...
-                    if container
-                        document.getElementById(container).innerHTML = '<pre><code data-language="javascript">' + htmlEscape(sc.innerHTML) + '</code></pre>'
+                    # if container
+                        # document.getElementById(container).innerHTML = '<pre><code data-language="javascript">' + htmlEscape(sc.innerHTML) + '</code></pre>'
                         # display it as a code snippet 
 
             # search html snippets
-            Rainbow.color()
+            # Rainbow.color()
             # i guess color code the code snippets
 
         xhr.send null
