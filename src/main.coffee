@@ -8,23 +8,8 @@ require ['$api/models', '$views/list#List'], (models, List) ->
                 .replace(/>/g, '&gt;')
 
     tabs = () ->
-        # THIS PART IS FOR IF YOU WANT TABS AT THE TOP, 
-        # args = models.application.arguments # arguments are in the manifest.json file
-        # if args
-            # lastArg = args[args.length - 1] #lastArg is always index until I change it
-            # return if lastArg isnt 'index' and lastArg isnt 'tabs'
-
-        # compose file 
-        # if args.length is 1
-            # file = (args[0] + '.html') 
-        # else
-            # file = '/tutorials/' + args.slice(0, args.length-1).join('/') + '.html'
-        # console.log(file);  //returns either index.html, tabs.html or any of the files in tutorials/
-
-        # args = models.application.arguments
-        file = 'index.html'
         xhr = new XMLHttpRequest()
-        xhr.open 'GET', file
+        xhr.open 'GET', 'index.html'
         xhr.onreadystatechange = () -> 
             # basically this says stop running this function if it's got all it's data or it can't retrieve it at all (i think)
             if xhr.readyState isnt 4 or xhr.status isnt 200 then return
