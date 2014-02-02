@@ -9,7 +9,7 @@ require(['$api/models', '$views/list#List'], function(models, List) {
     xhr = new XMLHttpRequest();
     xhr.open('GET', file);
     xhr.onreadystatechange = function() {
-      var aux, dropBox, list, playlist, wrapper;
+      var aux, dropBox, dropBoxMessage, playlistPlayer, wrapper;
       if (xhr.readyState !== 4 || xhr.status !== 200) {
         return;
       }
@@ -19,43 +19,42 @@ require(['$api/models', '$views/list#List'], function(models, List) {
       aux.innerHTML = xhr.responseText;
       wrapper.innerHTML = aux.querySelector('#wrapper').innerHTML;
       window.scrollTo(0, 0);
-      playlist = models.Playlist.fromURI('spotify:user:gorillawit:playlist:3SD5mWUVQG7TJfuJmJDwKq');
-      list = List.forPlaylist(playlist);
-      document.getElementById('playlist-player').appendChild(list.node);
-      list.init();
       dropBox = document.querySelector('#drop-box');
+      dropBoxMessage = dropBox.querySelector('p');
+      playlistPlayer = document.getElementById('playlist-player');
       dropBox.addEventListener('dragstart', function(e) {
         e.dataTransfer.setData('text/html', this.innerHTML);
         return e.dataTransfer.effectAllowed = 'copy';
-      });
+      }, false);
       dropBox.addEventListener('dragenter', function(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
         return this.classList.add('over');
-      });
+      }, false);
       dropBox.addEventListener('dragover', function(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
         return false;
-      });
+      }, false);
       dropBox.addEventListener('dragleave', function(e) {
         e.preventDefault();
         return this.classList.remove('over');
-      });
+      }, false);
       return dropBox.addEventListener('drop', function(e) {
-        var drop, successMessage;
+        var list, playlist;
         e.preventDefault();
-        drop = models.Playlist.fromURI(e.dataTransfer.getData('text'));
-        this.classList.remove('over');
-        successMessage = document.createElement('p');
-        successMessage.innerHTML = 'Playlist successfully dropped: ' + drop.uri;
-        return this.appendChild(successMessage);
-      });
+        playlist = models.Playlist.fromURI(e.dataTransfer.getData('text'));
+        list = List.forPlaylist(playlist);
+        playlistPlayer.appendChild(list.node);
+        list.init();
+        dropBoxMessage.setAttribute("class", "hidden");
+        dropBox.setAttribute("class", "hidden");
+        return this.classList.remove('over');
+      }, false);
     };
     return xhr.send(null);
   };
-  models.application.load('arguments').done(tabs);
-  return models.application.addEventListener('arguments', tabs);
+  return models.application.load().done(tabs);
 });
 
 //# sourceMappingURL=../js/main.js.map

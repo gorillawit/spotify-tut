@@ -71,9 +71,11 @@ ul {
 #player .sp-list {width:inherit;max-height:inherit;}
 
 /* Drop Box */
-#drop-box {border:4px dashed #333;width:100%;height:200px;padding:10px;}
+#drop-box {width:100%;height:200px;padding:10px;}
 #drop-box.over {opacity:0.8;border-color:#74c043;}
-
+.show{border:4px dashed #333;}
+.hidden{border:none;}
+p.hidden{display: none;}
 /* Buttons */
 .buttons button {margin: 0 20px 0 0;} 
 
